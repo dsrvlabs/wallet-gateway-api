@@ -1,13 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
 import { Request, Response } from 'express';
-
-export interface ErrorResponse {
-  statusCode: number;
-  timestamp: string;
-  path: string;
-  message: string | string[];
-  requestId?: string;
-}
+import { ApiResponseDto } from '../dto/response.dto';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -18,16 +11,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const exceptionResponse = exception.getResponse();
 
-    const errorResponse: ErrorResponse = {
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      message:
-        typeof exceptionResponse === 'string'
-          ? exceptionResponse
-          : (exceptionResponse as any).message || exception.message,
-      requestId: request.headers['x-request-id'] as string,
-    };
+    const message =
+      typeof exceptionResponse === 'string'
+        ? exceptionResponse
+        : (exceptionResponse as any).message || exception.message;
+
+    // 통일된 에러 응답 형식
+    const errorResponse = new ApiResponseDto(
+      (request.headers['x-request-id'] as string) || '',
+      false,
+      null,
+      {
+        code: status,
+        message: Array.isArray(message) ? message.join(', ') : message,
+      },
+    );
 
     response.status(status).json(errorResponse);
   }

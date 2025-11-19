@@ -4,7 +4,7 @@ import { WalletService } from './wallet.service';
 import { CreateWalletRequestDto } from './dto/create-wallet-request.dto';
 import { RequestId } from '../common/decorators/request-id.decorator';
 import { RequestIdGuard } from '../common/guards/request-id.guard';
-import { RequestIdResponseDto } from '../common/dto/response.dto';
+import { ApiResponseDto } from '../common/dto/response.dto';
 
 @ApiTags('wallet')
 @Controller('v1/wallet')
@@ -28,17 +28,18 @@ export class WalletController {
   @ApiResponse({
     status: 201,
     description: '주소 생성 요청이 성공적으로 생성되었습니다.',
-    type: RequestIdResponseDto,
+    type: ApiResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: '잘못된 요청 (x-request-id 헤더 누락 또는 유효하지 않은 형식)',
+    type: ApiResponseDto,
   })
   async createWalletRequest(
     @RequestId() requestId: string,
     @Body() dto: CreateWalletRequestDto,
-  ): Promise<RequestIdResponseDto> {
+  ): Promise<{ requestId: string }> {
     await this.walletService.createWalletRequest(requestId, dto);
-    return new RequestIdResponseDto(requestId);
+    return { requestId };
   }
 }
