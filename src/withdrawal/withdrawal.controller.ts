@@ -34,11 +34,16 @@ export class WithdrawalController {
     description: '잘못된 요청 (x-request-id 헤더 누락 또는 유효하지 않은 형식)',
     type: ApiResponseDto,
   })
+  @ApiResponse({
+    status: 409,
+    description: '중복된 요청 (동일한 requestId가 이미 존재함)',
+    type: ApiResponseDto,
+  })
   async createWithdrawalRequest(
     @RequestId() requestId: string,
     @Body() dto: CreateWithdrawalRequestDto,
-  ): Promise<{ requestId: string }> {
-    await this.withdrawalService.createWithdrawalRequest(requestId, dto);
-    return { requestId };
+  ): Promise<{ id: number }> {
+    const id = await this.withdrawalService.createWithdrawalRequest(requestId, dto);
+    return { id };
   }
 }

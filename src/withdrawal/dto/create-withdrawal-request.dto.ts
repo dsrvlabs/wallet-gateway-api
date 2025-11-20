@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsUUID, IsNotEmpty, Matches } from 'class-validator';
+import { IsString, IsInt, IsNotEmpty, Matches } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -9,7 +9,6 @@ export class CreateWithdrawalRequestDto {
     format: 'uuid',
   })
   @IsString()
-  @IsUUID()
   @IsNotEmpty()
   organizationId: string;
 

@@ -6,9 +6,8 @@ export class CreateWalletRequestDto {
     description: '조직 식별자',
     example: 'KqQjPXZna31P4mhQ',
   })
-  @IsOptional()
   @IsString()
-  organizationId?: string;
+  organizationId: string;
 
   @ApiProperty({
     description: 'SLIP-0044 (예: 60=EVM, 0=BTC, 501=Sol)',

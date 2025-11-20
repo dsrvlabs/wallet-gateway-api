@@ -4,4 +4,4 @@ database:
   username: postgres
   password: ''
   database: wallet
-  logging: false
+  logging: true

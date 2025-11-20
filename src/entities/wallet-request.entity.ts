@@ -23,8 +23,8 @@ export class WalletRequest {
   @Column({ type: 'uuid', name: 'request_id' })
   requestId: string;
 
-  @Column({ type: 'uuid', name: 'organization_id', nullable: true })
-  organizationId?: string;
+  @Column({ type: 'text', name: 'organization_id', nullable: true })
+  organizationId: string;
 
   @Column({ type: 'int', name: 'coin_type' })
   coinType: number;

@@ -23,7 +23,7 @@ export class WithdrawalRequest {
   @Column({ type: 'uuid', name: 'request_id' })
   requestId: string;
 
-  @Column({ type: 'uuid', name: 'organization_id' })
+  @Column({ type: 'text', name: 'organization_id' })
   organizationId: string;
 
   @Column({ type: 'int', name: 'coin_type' })
