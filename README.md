@@ -5,85 +5,33 @@ NestJS + TypeScript 기반의 Wallet Gateway API 서버입니다.
 ## 설치
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## 실행
 
 ```bash
 # 개발 모드
-npm run start:dev
+pnpm run start:dev
 
 # 프로덕션 빌드
-npm run build
-npm run start:prod
+pnpm run build
+pnpm run start:prod
 ```
 
-## API 엔드포인트
+## API 스펙
 
-### 주소 생성 요청 API
+API 스펙은 다음을 참조하세요:
 
-```bash
-POST /v1/wallet
-```
+- **Notion 문서**: [Server API Spec](https://www.notion.so/Server-API-Spec-2af7fc3011a9805696b2d08eb63ba5bc?source=copy_link)
+- **Swagger UI**: 서버 실행 후 `http://localhost:3000/api`에서 확인 가능
 
-**헤더:**
-- `x-request-id`: 필수 (UUID 형식)
+### 주요 엔드포인트
 
-**요청 본문:**
-```json
-{
-  "organizationId": "KqQjPXZna31P4mhQ",
-  "coinType": 60,
-  "accountId": 0,
-  "change": 0
-}
-```
+- `POST /v1/wallet` - 주소 생성 요청
+- `POST /v1/withdrawal` - 출금 요청
 
-**응답 (201 Created):**
-```json
-{
-  "requestId": "2f3b4f7c-7a6d-4b39-9a56-7b0f1e9a1b10"
-}
-```
-
-### 출금 요청 API
-
-```bash
-POST /v1/withdrawal
-```
-
-**헤더:**
-- `x-request-id`: 필수 (UUID 형식)
-
-**요청 본문:**
-```json
-{
-  "organizationId": "0b9f4c27-74a2-4dc4-9b47-3e2a1c8a7f51",
-  "coinType": 60,
-  "from": "0x1111111111111111111111111111111111111111",
-  "to": "0x2222222222222222222222222222222222222222",
-  "amount": "0.125"
-}
-```
-
-**응답 (201 Created):**
-```json
-{
-  "requestId": "7c6ae2d6-3e0a-4a38-9a52-5e8b5b2d1e44"
-}
-```
-
-## 주요 기능
-
-- ✅ 글로벌 Validation Pipe (class-validator, class-transformer)
-- ✅ 글로벌 Exception Filter 및 통일된 에러 응답 포맷
-- ✅ Winston 기반 로깅 (nest-logger)
-  - HTTP 요청/응답 로깅 (HttpLoggerMiddleware)
-  - 요청/응답 시간 측정
-  - 서비스 레벨 로깅 (LoggerService)
-- ✅ `x-request-id` 헤더 필수 검증 (UUID 형식)
-- ✅ Idempotency 지원 (동일한 request-id로 중복 요청 방지)
+모든 API는 `x-request-id` 헤더가 필수이며, 통일된 응답 형식을 사용합니다.
 
 ## 프로젝트 구조
 
@@ -115,6 +63,7 @@ src/
 ### HTTP 로깅
 
 `HttpLoggerMiddleware`가 모든 HTTP 요청/응답을 자동으로 로깅합니다:
+
 - 요청: method, url, body, query, params
 - 응답: method, url, statusCode, responseTime, body
 
@@ -131,4 +80,3 @@ this.logger.log('Message', 'Context');
 this.logger.warn('Warning', 'Context');
 this.logger.error('Error', 'Stack', 'Context');
 ```
-
